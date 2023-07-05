@@ -8,6 +8,7 @@ import com.mygdx.game.ui.ImageView;
 import com.mygdx.game.ui.TextButton;
 import com.mygdx.game.ui.TextView;
 import com.mygdx.game.ui.UiComponent;
+import com.mygdx.game.utils.DifficultyLevel;
 import com.mygdx.game.utils.GameSettings;
 import com.mygdx.game.utils.MemoryLoader;
 import com.sun.tools.sjavac.Log;
@@ -18,6 +19,7 @@ public class SettingsScreen implements Screen {
 
     ArrayList<UiComponent> uiComponentsList;
     MyGdxGame myGdxGame;
+    TextView difficultyLabel;
     TextButton difficultyButton;
     TextButton soundsButton;
     TextButton resetButton;
@@ -28,15 +30,21 @@ public class SettingsScreen implements Screen {
 
         ImageView background = new ImageView(0, 0, GameSettings.SCR_WIDTH, GameSettings.SCR_HEIGHT, "backgrounds/settingsBG.jpg");
         TextView title = new TextView(myGdxGame.largeFont.bitmapFont, "Settings", -1, 950);
-        ImageView returnButton = new ImageView(200, 950, 100, 100, "icons/backIcon.png");
+        ImageView returnButton = new ImageView(200, 850, 100, 100, "icons/backIcon.png");
         returnButton.setOnClickListener(onReturnButtonClickListener);
 
+        difficultyLabel = new TextView(myGdxGame.secondaryFont.bitmapFont, getDifficultyLabelText(MemoryLoader.loadDifficultyLevel()), 650, 700);
         difficultyButton = new TextButton(myGdxGame.commonFont.bitmapFont, "Change difficulty", 200, 700);
+        difficultyButton.setOnClickListener(onChangeDifficultyClickListener);
+
         soundsButton = new TextButton(myGdxGame.commonFont.bitmapFont, getSoundButtonText(), 200, 600);
+        soundsButton.setOnClickListener(onChangeMusicClickListener);
+
         resetButton = new TextButton(myGdxGame.commonFont.bitmapFont, "Clear all saves", 200, 500);
 
         uiComponentsList.add(background);
         uiComponentsList.add(title);
+        uiComponentsList.add(difficultyLabel);
         uiComponentsList.add(returnButton);
         uiComponentsList.add(difficultyButton);
         uiComponentsList.add(soundsButton);
@@ -55,7 +63,7 @@ public class SettingsScreen implements Screen {
             myGdxGame.touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             myGdxGame.touch = myGdxGame.camera.unproject(myGdxGame.touch);
             for (UiComponent component : uiComponentsList) {
-                if(component.isVisible) component.isHit(myGdxGame.touch.x, myGdxGame.touch.y);
+                if (component.isVisible) component.isHit(myGdxGame.touch.x, myGdxGame.touch.y);
             }
         }
 
@@ -102,11 +110,55 @@ public class SettingsScreen implements Screen {
         else return "Turn of music";
     }
 
+    private String getDifficultyLabelText(DifficultyLevel difficultyLevel) {
+        switch (difficultyLevel) {
+            case EASY:
+                return "(easy)";
+            case HARD:
+                return "(hard)";
+            case MEDIUM:
+                return "(medium)";
+            default:
+                return "(error)";
+        }
+    }
+
     UiComponent.OnClickListener onReturnButtonClickListener = new UiComponent.OnClickListener() {
         @Override
         public void onClicked() {
             Gdx.app.debug("onClicked", "onReturnButtonClicked");
             myGdxGame.setScreen(myGdxGame.menuScreen);
+        }
+    };
+
+    UiComponent.OnClickListener onChangeDifficultyClickListener = new UiComponent.OnClickListener() {
+        @Override
+        public void onClicked() {
+            Gdx.app.debug("onClicked", "onChangeDifficultyClicked");
+            DifficultyLevel difficultyLevel = MemoryLoader.loadDifficultyLevel();
+            switch (difficultyLevel) {
+                case EASY:
+                    difficultyLevel = DifficultyLevel.MEDIUM;
+                    break;
+                case MEDIUM:
+                    difficultyLevel = DifficultyLevel.HARD;
+                    break;
+                case HARD:
+                    difficultyLevel = DifficultyLevel.EASY;
+                    break;
+            }
+            difficultyLabel.text = getDifficultyLabelText(difficultyLevel);
+            MemoryLoader.saveDifficultyLevel(difficultyLevel);
+
+        }
+    };
+
+    UiComponent.OnClickListener onChangeMusicClickListener = new UiComponent.OnClickListener() {
+        @Override
+        public void onClicked() {
+            boolean isMusicOn = MemoryLoader.loadMusicState();
+            MemoryLoader.saveMusicState(!isMusicOn);
+            soundsButton.text = getSoundButtonText();
         }
     };
 }

@@ -11,10 +11,10 @@ public class MyCustomFont {
 
     public BitmapFont bitmapFont;
 
-    MyCustomFont(int size, String fontName) {
+    MyCustomFont(int size, String fontName, Color color) {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(fontName));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.color = new Color(1, 1, 1, 1);
+        parameter.color = color;
         parameter.size = size;
         parameter.borderColor = Color.BLACK;
         parameter.borderWidth = 1;

@@ -9,14 +9,14 @@ public class GameSettings {
     public static boolean DEFAULT_SOUND_STATE = false;
 
     // Easy settings:
-    public static int COUNT_OF_ENEMIES_EASY = 15;
-    public static float ENEMY_SPEED_EASY = 10;
+    public static final int COUNT_OF_ENEMIES_EASY = 15;
+    public static final float ENEMY_SPEED_EASY = 10;
 
     // Medium settings:
-    public static int COUNT_OF_ENEMIES_MEDIUM = 30;
-    public static float ENEMY_SPEED_MEDIUM = 15;
+    public static final int COUNT_OF_ENEMIES_MEDIUM = 30;
+    public static final float ENEMY_SPEED_MEDIUM = 15;
 
     // Hard settings:
-    public static int COUNT_OF_ENEMIES_HARD = 45;
-    public static float ENEMY_SPEED_HARD = 20;
+    public static final int COUNT_OF_ENEMIES_HARD = 45;
+    public static final float ENEMY_SPEED_HARD = 20;
 }

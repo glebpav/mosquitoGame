@@ -4,8 +4,8 @@ import com.mygdx.game.MyGdxGame;
 
 public class UiComponent {
 
-    float x;
-    float y;
+    public float x;
+    public float y;
     float width;
     float height;
     public boolean isVisible;

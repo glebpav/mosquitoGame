@@ -55,7 +55,6 @@ public class MenuScreen implements Screen {
 
         if (Gdx.input.justTouched()) {
             myGdxGame.touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            // check is it useful
             myGdxGame.camera.unproject(myGdxGame.touch);
             for (UiComponent component : uiComponentsList) {
                 if (component.isVisible) component.isHit(myGdxGame.touch.x, myGdxGame.touch.y);
@@ -111,14 +110,6 @@ public class MenuScreen implements Screen {
         }
     };
 
-    private final UiComponent.OnClickListener onButtonAboutClicked = new UiComponent.OnClickListener() {
-        @Override
-        public void onClicked() {
-            Gdx.app.debug("onClicked", "onButtonAboutClicked");
-            myGdxGame.setScreen(myGdxGame.aboutScreen);
-        }
-    };
-
     private final UiComponent.OnClickListener onButtonSettingsClicked = new UiComponent.OnClickListener() {
         @Override
         public void onClicked() {
@@ -131,7 +122,16 @@ public class MenuScreen implements Screen {
         @Override
         public void onClicked() {
             Gdx.app.debug("onClicked", "onButtonExitClicked");
-            // myGdxGame.setScreen(myGdxGame.);
+            Gdx.app.exit();
         }
     };
+
+    UiComponent.OnClickListener onButtonAboutClicked = new UiComponent.OnClickListener() {
+        @Override
+        public void onClicked() {
+            Gdx.app.debug("onClicked", "onButtonAboutClicked");
+            myGdxGame.setScreen(myGdxGame.aboutScreen);
+        }
+    };
+
 }
