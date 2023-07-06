@@ -11,6 +11,7 @@ import com.mygdx.game.ui.UiComponent;
 import com.mygdx.game.utils.DifficultyLevel;
 import com.mygdx.game.utils.GameSettings;
 import com.mygdx.game.utils.MemoryLoader;
+import com.mygdx.game.utils.SoundExecutor;
 import com.sun.tools.sjavac.Log;
 
 import java.util.ArrayList;
@@ -106,8 +107,8 @@ public class SettingsScreen implements Screen {
 
     private String getSoundButtonText() {
         boolean musicState = MemoryLoader.loadMusicState();
-        if (musicState) return "Turn on music";
-        else return "Turn of music";
+        if (musicState) return "Turn off music";
+        else return "Turn on music";
     }
 
     private String getDifficultyLabelText(DifficultyLevel difficultyLevel) {
@@ -158,7 +159,10 @@ public class SettingsScreen implements Screen {
         public void onClicked() {
             boolean isMusicOn = MemoryLoader.loadMusicState();
             MemoryLoader.saveMusicState(!isMusicOn);
+            isMusicOn = !isMusicOn;
             soundsButton.text = getSoundButtonText();
+            if (isMusicOn) SoundExecutor.playBackSound();
+            else SoundExecutor.stopPlaying();
         }
     };
 }

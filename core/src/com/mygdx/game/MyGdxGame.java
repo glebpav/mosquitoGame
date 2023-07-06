@@ -12,6 +12,8 @@ import com.mygdx.game.screens.GameScreen;
 import com.mygdx.game.screens.MenuScreen;
 import com.mygdx.game.screens.SettingsScreen;
 import com.mygdx.game.utils.GameSettings;
+import com.mygdx.game.utils.MemoryLoader;
+import com.mygdx.game.utils.SoundExecutor;
 
 public class MyGdxGame extends Game {
 
@@ -47,6 +49,8 @@ public class MyGdxGame extends Game {
 		settingsScreen = new SettingsScreen(this);
 
 		setScreen(menuScreen);
+		Gdx.app.debug("Sounds", String.valueOf(MemoryLoader.loadMusicState()));
+		if (MemoryLoader.loadMusicState()) SoundExecutor.playBackSound();
 	}
 	
 	@Override

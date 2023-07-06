@@ -6,7 +6,7 @@ public class GameSettings {
     public static int SCR_HEIGHT = 1080;
 
     public static DifficultyLevel DEFAULT_DIFFICULTY = DifficultyLevel.MEDIUM;
-    public static boolean DEFAULT_SOUND_STATE = false;
+    public static boolean DEFAULT_SOUND_STATE = true;
 
     public static final int BUTTERFLY_DAMAGE = 30;
 

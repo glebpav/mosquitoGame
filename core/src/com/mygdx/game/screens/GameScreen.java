@@ -17,6 +17,7 @@ import com.mygdx.game.utils.DifficultyLevel;
 import com.mygdx.game.utils.GameSession;
 import com.mygdx.game.utils.GameSettings;
 import com.mygdx.game.utils.MemoryLoader;
+import com.mygdx.game.utils.SoundExecutor;
 
 import java.util.ArrayList;
 
@@ -66,6 +67,7 @@ public class GameScreen implements Screen {
 
         textViewSessionTime = new TextView(myGdxGame.commonFont.bitmapFont, "", 700, 700);
         returnButton = new TextButton(myGdxGame.secondaryFont.bitmapFont, "Return home", 300, 500);
+        returnButton.setOnClickListener(onReturnButtonClickListener);
         uiComponentsList.add(hitPointsBar);
         uiComponentsListEndOfGame.add(textViewSessionTime);
         uiComponentsListEndOfGame.add(returnButton);
@@ -85,8 +87,18 @@ public class GameScreen implements Screen {
         if (Gdx.input.justTouched()) {
             myGdxGame.touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             myGdxGame.touch = myGdxGame.camera.unproject(myGdxGame.touch);
-            for (UiComponent component : uiComponentsList) {
-                if (component.isVisible) component.isHit(myGdxGame.touch.x, myGdxGame.touch.y);
+            if (gameSession.gameState == GameSession.PLAY_GAME) {
+                for (UiComponent component : uiComponentsList) {
+                    if (component.isVisible) component.isHit(myGdxGame.touch.x, myGdxGame.touch.y);
+                }
+            } else if (gameSession.gameState == GameSession.GAME_OVER) {
+                for (UiComponent component : uiComponentsListGameOver) {
+                    if (component.isVisible) component.isHit(myGdxGame.touch.x, myGdxGame.touch.y);
+                }
+            } else if (gameSession.gameState == GameSession.END_OF_GAME) {
+                for (UiComponent component : uiComponentsListEndOfGame) {
+                    if (component.isVisible) component.isHit(myGdxGame.touch.x, myGdxGame.touch.y);
+                }
             }
         }
 
@@ -182,6 +194,7 @@ public class GameScreen implements Screen {
         @Override
         public void onKill() {
             Gdx.app.debug("onKill", "killed");
+            SoundExecutor.playMosquitoSound();
             aliveMosquitoesCount -= 1;
             if (aliveMosquitoesCount == 0){
                 gameSession.gameState = GameSession.END_OF_GAME;
@@ -193,8 +206,17 @@ public class GameScreen implements Screen {
     Butterfly.OnHitButterflyListener onHitButterflyListener = new Butterfly.OnHitButterflyListener() {
         @Override
         public void onHit() {
-            gameSession.getDamage();
+            if (gameSession.gameState == GameSession.PLAY_GAME) {
+                gameSession.getDamage();
+                SoundExecutor.playMosquitoSound();
+            }
+        }
+    };
 
+    UiComponent.OnClickListener onReturnButtonClickListener = new UiComponent.OnClickListener() {
+        @Override
+        public void onClicked() {
+            myGdxGame.setScreen(myGdxGame.menuScreen);
         }
     };
 
